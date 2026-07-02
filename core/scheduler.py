@@ -1,20 +1,21 @@
 import time
 
 class Scheduler:
-    def __init__(self, state_graph):
-        self.state = state_graph
+    def __init__(self):
+        self.tasks = []
 
-    def decide(self):
-        env = self.state.get("environment", "SAFE")
-        distance = self.state.get("distance", 100)
+    def add_task(self, interval, func):
+        self.tasks.append({
+            "interval": interval,
+            "func": func,
+            "last": 0
+        })
 
-        if env == "DANGER":
-            return {"action": "STOP", "delay": 0}
-        elif env == "WARNING":
-            return {"action": "SLOW_DOWN", "delay": 0.2}
-        else:
-            return {"action": "MOVE_FORWARD", "delay": 0.1}
+    def run(self):
+        while True:
+            now = time.time()
 
-    def execute(self, action_packet):
-        time.sleep(action_packet["delay"])
-        print(f"[SCHEDULER] ACTION -> {action_packet['action']}")
+            for task in self.tasks:
+                if now - task["last"] >= task["interval"]:
+                    task["func"]()
+                    task["last"] = now
