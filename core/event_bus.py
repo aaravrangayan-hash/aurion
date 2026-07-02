@@ -1,17 +1,16 @@
 from collections import defaultdict
-import threading
 
 class EventBus:
-    def __init__(self):
-        self.listeners = defaultdict(list)
+    def __init__(self, logger=None):
+        self.subscribers = defaultdict(list)
+        self.logger = logger
 
     def subscribe(self, event_type, callback):
-        self.listeners[event_type].append(callback)
+        self.subscribers[event_type].append(callback)
 
-    def emit(self, event_type, data=None):
-        if event_type not in self.listeners:
-            return
+    def emit(self, event_type, data):
+        if self.logger:
+            self.logger.log_event(event_type, data)
 
-        for cb in self.listeners[event_type]:
-            # run async so system doesn't freeze
-            threading.Thread(target=cb, args=(data,)).start()
+        for callback in self.subscribers[event_type]:
+            callback(data)
