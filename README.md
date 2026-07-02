@@ -54,3 +54,52 @@ Records all events and state changes for replay and debugging.
 ---
 
 ## System Flow
+Sensor Input → Event Bus → Processing → State Graph → Logger
+
+
+---
+
+## 🧪 Example Output
+
+
+[SENSOR] value=72 noise=1.2
+[FUSED] 68.4
+[STATE] ACTIVE
+
+
+---
+
+##  Run
+
+```bash
+python main.py
+ Vision
+
+AURION aims to become a foundational runtime layer for:
+
+robotics systems
+IoT device networks
+autonomous agents
+real-time decision systems
+ Structure
+aurion/
+│ core/
+│ runtime.py
+│ cli.py
+│ main.py
+
+---
+
+#  3. .gitignore (IMPORTANT FOR “REAL PROJECT FEEL”)
+
+```gitignore id="git1"
+__pycache__/
+*.pyc
+.vscode/
+.env
+ 4. LICENSE (simple MIT)
+MIT License
+
+Copyright (c) 2026
+
+Permission is hereby granted...
