@@ -1,93 +1,56 @@
-**Adaptive Unified Robotics & IoT Orchestration Network**
+# AURION
 
-AURION is a distributed control framework for embedded systems that unifies sensors, microcontrollers, and actuators into a single event-driven state graph.
+AURION is a lightweight observability runtime for real-time event-driven systems.
 
-It enables real-time coordination between heterogeneous hardware nodes using a shared event bus, sensor fusion engine, and deterministic actuation scheduler.
+It enables engineers to trace, debug, and replay decision flows in systems built on streaming data, such as robotics, IoT devices, and autonomous agents.
 
 ---
 
-## Core Concept
+## Problem
 
-Instead of isolated microcontroller logic, AURION treats all devices as nodes in a shared computational graph.
+Modern real-time systems are difficult to debug because:
 
-Each node:
-- emits events (sensor updates, state changes)
-- subscribes to system-wide signals
-- executes controlled actuation commands
+- Events happen continuously and asynchronously
+- State transitions are implicit and hard to trace
+- System behavior depends on time-based sequences
+- Failures are difficult to reproduce
+
+As a result, engineers often cannot answer:
+
+> “Why did the system make this decision?”
+
+---
+
+## Solution
+
+AURION introduces a structured runtime that:
+
+- Captures all system events
+- Tracks state transitions with causality
+- Logs decision flow in real time
+- Enables replay of system behavior
 
 ---
 
 ## Architecture
 
+AURION is composed of four core layers:
 
-Sensors → Event Bus → State Graph → Decision Engine → Actuators
+### 1. Event Bus
+Handles decoupled communication between system components.
 
+### 2. Scheduler
+Drives deterministic execution of system loops.
 
-### Modules
+### 3. Sensor Fusion
+Aggregates noisy streaming inputs into stable signals.
 
-- **Event Bus**: real-time message propagation system
-- **State Graph**: global system state representation
-- **Sensor Fusion**: merges multi-sensor inputs into unified state
-- **Scheduler**: resolves actuator conflicts + timing constraints
-- **Telemetry Layer**: logs full system behavior over time
+### 4. State Graph
+Manages state transitions based on real-time inputs.
 
----
-
-## Supported Nodes
-
-- Arduino (serial-based communication)
-- ESP32 (WiFi/MQTT-ready extension)
-- Raspberry Pi (Python-native node)
-- Simulated nodes (for testing logic without hardware)
+### 5. Logger (Observability Layer)
+Records all events and state changes for replay and debugging.
 
 ---
 
-## Example Use Case
-
-A drone system:
-
-- ultrasonic sensor detects obstacle
-- IMU detects tilt correction needed
-- event bus triggers avoidance logic
-- scheduler adjusts motor output in real time
-
----
-
-## Installation
-
-```bash
-git clone https://github.com/yourname/aurion.git
-cd aurion
-pip install -r requirements.txt
-Run Example
-python main.py
-Status
-
-Early-stage systems prototype:
-
-event system: stable
-node abstraction: in progress
-hardware integration: experimental
-Vision
-
-AURION aims to become a unified control plane for distributed physical computing systems.
-
-
----
-
-# core/event_bus.py
-
-```python
-class EventBus:
-    def __init__(self):
-        self.subscribers = {}
-
-    def subscribe(self, event_type, callback):
-        if event_type not in self.subscribers:
-            self.subscribers[event_type] = []
-        self.subscribers[event_type].append(callback)
-
-    def emit(self, event_type, data):
-        if event_type in self.subscribers:
-            for callback in self.subscribers[event_type]:
-                callback(data)
+## System Flow
